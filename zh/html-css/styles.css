@@ -10,6 +10,32 @@
     padding: 16px;
 }
 
+.grid-item {
+    font-family: Arial, Helvetica, sans-serif;
+
+    line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    white-space: inherit;
+    text-overflow: ellipsis;
+}
+
+.grid-item:first-child {
+    padding-right: 10px;
+    grid-row: span 2;
+}
+
+#title {
+    font-size: x-large;
+    font-weight: bold;
+}
+
 .search-result-item {
+    display: grid;
+    padding: 10px;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 0.9fr;
     max-width: 768px;
 }

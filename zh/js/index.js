@@ -24,10 +24,31 @@
  * }
  * 
  */
+
 module.exports.createHttpHeaders = (input) => {
-    // TODO: your code here
-    return {};
-};
+    const headers = {};
+    
+    if (Array.isArray(input) && input.length > 0) {
+        input.forEach(item => {
+        
+            if (Array.isArray(item) && item.length >= 2) {
+                const [headerName, ...headerValues] = item;
+                const lowerCaseHeaderName = headerName.toLowerCase();
+                
+                
+                const joinedValues = headerValues.filter(Boolean).join(', ');
+                
+                if (headers[lowerCaseHeaderName]) {
+                    headers[lowerCaseHeaderName] += `, ${joinedValues}`;
+                } else {
+                    headers[lowerCaseHeaderName] = joinedValues;
+                }
+            }
+        });
+    }
+
+    return headers;
+}
 
 /**
  * Returns items for a paginated list.
@@ -49,6 +70,28 @@ module.exports.createHttpHeaders = (input) => {
  * ]
  */
 module.exports.getItems = (items, params) => {
-    // TODO: your code here
-    return [];
+    const { page, pageSize, sort } = params;
+
+    const sortedItems = items.sort((a, b) => {
+        if (sort === 'asc') {
+            return a.id - b.id;
+        } else if (sort === 'desc') {
+            return b.id - a.id;
+        }
+        return 0; 
+    });
+
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    const paginatedItems = sortedItems.slice(startIndex, endIndex);
+
+    const transformedItems = paginatedItems.map(item => {
+        return {
+            id: item.id,
+            title: { main: item.displayTitle }
+        };
+    });
+
+    return transformedItems;
 }
